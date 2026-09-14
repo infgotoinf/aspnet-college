@@ -1,17 +1,18 @@
-namespace asp3.DashboardCard;
+namespace asp3.Models;
 
-enum eTrend {
-	Up,
-	Down,
-	Stable
+public enum Trend
+{
+    Up,
+    Down,
+    Stable
 }
 
 public class DashboardCard
 {
     public int Id { get; set; }
-    public string Title { get; set; } = "";
-    public decimal Value { get; set; } = 0;
-    public eTrend Trend { get; set; } = "Stable";
-    public string Unit { get; set; } = "%";
-    public string? Description { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public decimal Value { get; set; }
+    public Trend Trend { get; set; }
+    public string Unit { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
 }

@@ -1,0 +1,94 @@
+@model IEnumerable<DashboardCard>
+
+@{
+    Layout = "_AppLayout";
+
+    ViewData["Title"] = "Дашборд";
+
+    decimal totalValue = Model.Sum(card => card.Value);
+    int cardCount = Model.Count();
+
+    int i = 0;
+}
+
+@functions {
+    string GetTrendLabel(Trend trend)
+    {
+        return trend switch
+        {
+            Trend.Up => "Рост",
+            Trend.Down => "Снижение",
+            Trend.Stable => "Стабильно",
+            _ => "Неизвестно"
+        };
+    }
+}
+
+<!-- Админ-дашборд v1.0 -->
+
+@section PageHeader {
+    <h1>Дашборд</h1>
+
+    @* Данные за период из контроллера *@
+    <p>
+        Период: @ViewData["ReportPeriod"]
+    </p>
+
+    <p>
+        @cardCount показателей,
+        сумма: @totalValue @ViewBag.Currency
+    </p>
+}
+
+<div class="cards">
+    @foreach (var card in Model)
+    {
+        if (i > 0 && i % 3 == 0)
+        {
+            @:</div>
+            @:<div class="cards">
+        }
+
+        if (i < 3)
+        {
+            string trendSymbol = card.Trend switch
+            {
+                Trend.Up => "↑",
+                Trend.Down => "↓",
+                _ => "→"
+            };
+
+            <div class="card">
+                <h3>@card.Title</h3>
+
+                <p>
+                    <strong>@card.Value @card.Unit</strong>
+                </p>
+
+                <p>
+                    Тренд:
+                    @trendSymbol
+                    @GetTrendLabel(card.Trend)
+                </p>
+
+                @if (card.Value < 0)
+                {
+                    <span class="badge">Отрицательное значение</span>
+                }
+
+                <p>@card.Description</p>
+            </div>
+        }
+        else
+        {
+            @await Html.PartialAsync("_DashboardCard", card)
+        }
+
+        i++;
+    }
+</div>
+
+<div class="card" style="margin-top: 20px;">
+    <p>Всего карточек: @cardCount</p>
+    <p>Сумма значений: @totalValue</p>
+</div>
