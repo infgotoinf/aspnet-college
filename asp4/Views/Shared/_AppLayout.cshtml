@@ -1,0 +1,23 @@
+@{
+Layout = "_Layout";
+}
+
+@if (IsSectionDefined("PageHeader"))
+{
+@RenderSection("PageHeader", required: false)
+}
+
+<div class="content-layout">
+	<section>
+		@RenderBody()
+	</section>
+
+	<aside class="sidebar">
+		@await Component.InvokeAsync("TrendSummary")
+	</aside>
+</div>
+
+@if (IsSectionDefined("Scripts"))
+{
+@RenderSection("Scripts", required: false)
+}

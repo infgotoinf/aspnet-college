@@ -1,0 +1,196 @@
+Практическая работа: «Витрина товаров с админ-панелью»
+Темы : CSS и Bootstrap в ASP.NET Core; Bundling и minification (built-in); static files middleware;
+wwwroot; Bootstrap: grid, components (navbar, cards, modals, alerts).
+Фокус: не писать свои стили с нуля, а грамотно подключить и использовать Bootstrap, настроить
+работу со статикой и бандлингом, оформить типовые UI-компоненты.
+Цель работы
+Научиться:
+ подключать Bootstrap и свои CSS через static files и bundling/minification;
+ использовать сетку (grid) и компоненты Bootstrap (navbar, card, modal, alert);
+ правильно размещать файлы в wwwroot и ссылаться на них в Razor;
+ понимать, как middleware обслуживает статику и как бандлер собирает файлы.
+Задание 1. Настройка проекта и static files
+1. Папки в wwwroot (создать структуру):
+o css/ — ваши кастомные стили
+o js/ — ваши скрипты
+o img/ — картинки (заглушки можно взять из интернета или использовать placeholder)
+2. Проверка Program.cs:
+Убедитесь, что есть app.UseStaticFiles(). Это middleware, которое отдаёт файлы из wwwroot.
+3. Подключение стилей в _Layout.cshtml:
+Вместо прямого подключения файлов используйте секции и условную логику по окружению:
+<environment include="Development">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</environment>
+<environment exclude="Development">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+</environment>
+
+4. Настройка бандлинга и минификации:
+o Создайте bundleconfig.json в корне проекта:
+[
+
+{
+
+},
+{
+
+"outputFileName": "wwwroot/css/site.min.css",
+"inputFiles": [
+"wwwroot/css/site.css"
+],
+"minify": {
+"enabled": true,
+"renameFiles": true
+}
+"outputFileName": "wwwroot/js/site.min.js",
+"inputFiles": [
+"wwwroot/js/site.js"
+],
+"minify": {
+"enabled": true,
+"renameFiles": true
+
+]
+o
+
+}
+
+}
+
+Добавьте в .csproj задачу, чтобы бандлинг запускался при сборке (в большинстве
+шаблонов ASP.NET Core это уже есть, но проверьте наличие пакета
+BuildBundlerMinifier).
+
+Задание 2. Navbar через Bootstr ap
+В _Layout.cshtml:
+1. Реализуйте шапку с navbar:
+o тёмная тема (navbar-dark bg-dark)
+o логотип слева
+o пункты меню: «Каталог», «Корзина», «Админ» (ссылки-заглушки)
+o справа — кнопка «Войти» (или «Личный кабинет»)
+o адаптивность (бургер-меню на мобильных)
+Задание 3. Сетка (Gr id) и карточки товаров
+На странице каталога (Views/Catalog/Index.cshtml) реализуйте:
+1. Контейнер и сетка:
+Используйте container + row + колонки col-md-4 (3 карточки в ряд на планшетах и десктопах).
+2. Карточки товаров (Bootstrap card):
+Каждая карточка содержит:
+o картинку (img-fluid + заглушка)
+o заголовок (название товара)
+o описание (коротко)
+o цену (крупно, возможно с бейджем)
+o кнопку «В корзину» (стильная кнопка Bootstrap)
+o бейдж «Хит» или «Скидка» (через badge)
+3. Адаптивность: на мобильных — 1 карточка в ряд, на планшетах — 2, на десктопе — 3.
+Используйте col-12 col-md-6 col-lg-4.
+Задание 4. Aler t через Bootstr ap
+На странице корзины или на странице «Спасибо за заказ» выведите сообщение через компонент
+alert:
+ Если корзина пуста — alert-warning с текстом «Корзина пуста».
+ Если добавлен товар — alert-success с текстом «Товар добавлен в корзину».
+Добавьте кнопку закрытия и JS для скрытия алерта (Bootstrap JS уже подключён).
+Задание 5. Modal через Bootstr ap
+Реализуйте модальное окно «Подтверждение заказа»:
+1. Кнопка «Оформить заказ» открывает модалку.
+2. Внутри модалки — сводка заказа (список товаров, итоговая сумма).
+3. Кнопки: «Подтвердить» и «Отмена».
+
+HTML-структура модального окна (стандартная для Bootstrap):
+<!-- Кнопка вызова -->
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bstarget="#confirmOrderModal">
+Оформить заказ
+</button>
+<!-- Модальное окно -->
+<div class="modal fade" id="confirmOrderModal" tabindex="-1">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title">Подтверждение заказа</h5>
+<button type="button" class="btn-close" data-bsdismiss="modal"></button>
+</div>
+<div class="modal-body">
+<p>Вы уверены, что хотите оформить заказ на сумму
+<strong>@Model.TotalAmount.ToString("C")</strong>?</p>
+<ul class="list-group mb-3">
+@foreach (var item in Model.Items)
+{
+<li class="list-group-item">@item.Name —
+@item.Price.ToString("C")</li>
+}
+</ul>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-bsdismiss="modal">Отмена</button>
+<button type="submit" class="btn btn-primary">Подтвердить</button>
+</div>
+</div>
+</div>
+</div>
+
+Задание 6. Кастомны е стили (site.css)
+В wwwroot/css/site.css добавьте 2–3 правила, которые дополняют Bootstrap, но не ломают его:
+ Центрированный заголовок страницы:
+ Усиление отступа у карточек на мобильных:
+ Свой цвет для кнопки «Оформить заказ»:
+Подключите класс в Razor и проверьте, что бандлер корректно собирает и минифицирует файл.
+
+Структура проекта
+Project/
+├── wwwroot/
+│ ├── css/
+│ │ ├── site.css
+│ │ └── site.min.css (генерируется бандлером)
+│ ├── js/
+│ │ ├── site.js
+│ │ └── site.min.js
+│ └── img/
+├── Views/
+│ ├── Shared/
+│ │ ├── _Layout.cshtml
+│ │ └── _AlertPartial.cshtml (опционально)
+│ ├── Catalog/
+│ │ └── Index.cshtml
+│ └── Cart/
+│
+└── Index.cshtml
+├── bundleconfig.json
+└── Program.cs
+
+Дополнительны е задания (на «отлично»)
+Уровень: Лёгкий
+Адаптивная таблица цен в карточке
+В карточке товара добавьте блок «Цены»: обычная цена и цена со скидкой. Оформите через
+list-group или простую таблицу table table-borderless. На мобильных сделайте вертикальное
+расположение, на десктопе — горизонтальное.
+Уровень: Средний
+Кастомны й компонент «Тег-фильтр» на базе Bootstr ap
+На странице каталога добавьте панель фильтров: теги (например, «Электроника»,
+«Одежда», «Книги») в виде pill-кнопок (btn btn-sm btn-outline-secondary). При клике на тег —
+страница перезагружается с фильтром, выбранный тег подсвечивается классом active (или btnprimary).
+Добавьте небольшой JS в site.js, чтобы при клике визуально подсвечивать активный фильтр
+(без перезагрузки), а реальную фильтрацию оставить на сервере.
+Уровень: Сложный
+Динамические классы и состояния UI через Razor + Bootstr ap
+Для карточек товаров реализуйте динамические визуальные состояния:
+ «Нет в наличии» → карточка с рамкой border-danger, кнопка disabled, бейдж «Нет в
+наличии».
+ «Хит продаж» → бейдж «ХИТ» + тень (shadow-sm).
+ «Скидка > 30%» → зелёная рамка + бейдж «Большая скидка».
+
+Логика выбора классов — в Razor:
+@{
+
+var borderClass = card.Stock == 0 ? "border-danger" : "border-primary";
+var badgeClass = card.IsHit ? "bg-success text-white" : "bg-secondary textwhite";
+}
+<div class="card @borderClass">
+...
+<span class="badge @badgeClass">ХИТ</span>
+</div>
+
+Также добавьте в site.css дополнительные стили для этих состояний и проверьте, что
+минифицированный CSS корректно применяется.
+
+
