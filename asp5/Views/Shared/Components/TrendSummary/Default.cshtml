@@ -1,0 +1,32 @@
+@model IEnumerable<asp3.ViewComponents.TrendSummaryViewComponent.TrendSummaryItem>
+
+@functions {
+    string GetTrendLabel(Trend trend)
+    {
+        return trend switch
+        {
+            Trend.Up => "Рост",
+            Trend.Down => "Снижение",
+            Trend.Stable => "Стабильно",
+            _ => "Неизвестно"
+        };
+    }
+}
+
+<h2>Сводка по трендам</h2>
+
+@if (!Model.Any())
+{
+    <p>Нет данных</p>
+}
+else
+{
+    foreach (var summary in Model)
+    {
+        <div>
+            <strong>@GetTrendLabel(summary.Trend)</strong>
+            <p>Карточек: @summary.Count</p>
+            <p>Сумма: @summary.Sum</p>
+        </div>
+    }
+}

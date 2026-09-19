@@ -1,0 +1,21 @@
+@model IEnumerable<asp3.Models.Product>
+
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+<h1 class="page-title">Каталог товаров</h1>
+
+<input id="searchInput"
+       class="form-control mb-4"
+       placeholder="Поиск товаров..."
+       autocomplete="off">
+
+<div id="catalogGrid" class="row g-4">
+    <partial name="_ProductList" model="Model" />
+</div>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+}

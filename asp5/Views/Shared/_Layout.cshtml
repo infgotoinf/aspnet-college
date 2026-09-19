@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>@ViewData["Title"]</title>
+
+		<environment include="Development">
+			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+			<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+		</environment>
+
+		<environment exclude="Development">
+			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+			<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true">
+		</environment>
+
+		<link rel="stylesheet" href="~/asp3.styles.css" asp-append-version="true">
+	</head>
+
+	<body>
+		<header>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+				<div class="container">
+					<a class="navbar-brand" asp-controller="Catalog" asp-action="Index">
+						Магазин
+					</a>
+
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Открыть меню">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div id="mainNavbar" class="collapse navbar-collapse">
+						<ul class="navbar-nav me-auto">
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Catalog" asp-action="Index">
+									Каталог
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Cart" asp-action="Index">
+									Корзина <span id="cartBadge" class="badge bg-primary">0</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+									Админ
+								</a>
+							</li>
+						</ul>
+
+						<a class="btn btn-outline-light" asp-controller="Dashboard" asp-action="Index">
+							Войти
+						</a>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<main class="container pb-4">
+			@if (IsSectionDefined("PageHeader"))
+			{
+			@RenderSection("PageHeader", required: false)
+			}
+
+			@RenderBody()
+		</main>
+
+		<footer class="border-top text-muted py-3">
+			<div class="container">
+				&copy; 2026 - Магазин
+			</div>
+		</footer>
+
+		<environment include="Development">
+			<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+			<script src="~/js/site.js" asp-append-version="true"></script>
+		</environment>
+
+		<environment exclude="Development">
+			<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+			<script src="~/js/site.min.js" asp-append-version="true"></script>
+		</environment>
+
+		@await RenderSectionAsync("Scripts", required: false)
+	</body>
+</html>
