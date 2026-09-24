@@ -1,0 +1,111 @@
+@baseUrl = http://localhost:5255
+
+### Create a project
+POST {{baseUrl}}/api/projects
+Content-Type: application/json
+
+{
+  "name": "Веб-сайт",
+  "description": "Корпоративный портал"
+}
+
+### Get all projects
+GET {{baseUrl}}/api/projects
+
+### Get a project by ID
+GET {{baseUrl}}/api/projects/1
+
+### Update a project
+PUT {{baseUrl}}/api/projects/1
+Content-Type: application/json
+
+{
+  "name": "Веб-сайт v2",
+  "description": "Обновлённый портал"
+}
+
+### Delete a project
+DELETE {{baseUrl}}/api/projects/1
+
+### Create a task without status
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Сверстать главную",
+  "projectId": 1
+}
+
+### Create a task with status
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Проверить API",
+  "description": "Проверить CRUD",
+  "status": "InProgress",
+  "projectId": 1
+}
+
+### Get all tasks
+GET {{baseUrl}}/api/tasks
+
+### Get a task by ID
+GET {{baseUrl}}/api/tasks/1
+
+### Update a task
+PUT {{baseUrl}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Обновлённая задача",
+  "description": "Новая версия задачи",
+  "status": "Done",
+  "projectId": 1
+}
+
+### Update a task without status - expected 400
+PUT {{baseUrl}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Задача без статуса",
+  "projectId": 1
+}
+
+### Delete a task
+DELETE {{baseUrl}}/api/tasks/1
+
+### Get a missing project - expected 404
+GET {{baseUrl}}/api/projects/999
+
+### Get a missing task - expected 404
+GET {{baseUrl}}/api/tasks/999
+
+### Invalid project name - expected 400
+POST {{baseUrl}}/api/projects
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "test"
+}
+
+### Invalid task title - expected 400
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Test",
+  "projectId": 1
+}
+
+### Due date in the past - expected 400
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Задача с прошлой датой",
+  "dueDate": "2020-01-01T00:00:00Z",
+  "projectId": 1
+}
