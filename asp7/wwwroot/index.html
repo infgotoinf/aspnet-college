@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8">
+		<title>LiveCenterMonitoring</title>
+		<style>
+			.private {
+				color: blue;
+			}
+			
+			#status {
+				color: darkgreen;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>SignalR комнаты</h1>
+
+		<p id="status">Подключение...</p>
+		<p>Мой идентификатор: <code id="connectionId"></code></p>
+		<p>Онлайн: <span id="onlineCount">0</span></p>
+
+		<input id="userInput" placeholder="Имя пользователя">
+		<input id="roomInput" placeholder="Название комнаты">
+
+		<button id="joinButton">Войти</button>
+		<button id="leaveButton">Выйти</button>
+
+		<br><br>
+
+		<input id="messageInput" placeholder="Сообщение">
+		<button id="sendButton">Отправить</button>
+
+		<br><br>
+
+		<input id="targetInput" placeholder="ID получателя">
+		<input id="privateMessageInput" placeholder="Приватное сообщение">
+		<button id="privateButton">Отправить приватно</button>
+
+		<br><br>
+
+		<input id="notificationInput" placeholder="Внешнее уведомление">
+		<button id="roomNotificationButton">
+			Внешнее уведомление в комнату
+		</button>
+
+		<ul id="messagesList"></ul>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+		<script src="/js/app.js"></script>
+	</body>
+</html>
