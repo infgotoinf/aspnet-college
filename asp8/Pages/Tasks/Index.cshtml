@@ -1,0 +1,42 @@
+@page
+@model TodoManager.Pages.Tasks.IndexModel
+@{
+ViewData["Title"] = "Мои задачи";
+}
+
+<h1>Мои задачи</h1>
+
+@if (Model.Tasks.Count == 0)
+{
+<p>Задач пока нет.</p>
+}
+else
+{
+@foreach (var task in Model.Tasks)
+{
+<article class="card mb-3" data-task-card>
+	<div class="card-body">
+		<h2 class="h5">@task.Title</h2>
+		<p>@task.Description</p>
+		<p class="text-muted">
+			Создана: @task.CreatedAt.ToLocalTime().ToString("g")
+		</p>
+
+		@if (task.IsCompleted)
+		{
+		<span class="badge bg-success">Выполнена</span>
+		}
+		else
+		{
+		<form method="post" asp-page-handler="Complete" asp-route-id="@task.Id" data-complete-form>
+			<button type="submit" class="btn btn-success">
+				Отметить выполненной
+			</button>
+		</form>
+		}
+
+		<p class="text-danger mt-2" data-task-message aria-live="polite"></p>
+	</div>
+</article>
+}
+}
